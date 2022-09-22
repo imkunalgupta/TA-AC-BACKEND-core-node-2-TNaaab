@@ -8,16 +8,15 @@ function handleRequest(req, res) {
     store += chunk;
   });
   req.on('end', () => {
-    if (req.method === 'POST' && dataFormat === 'application/json') {
-      var parsedData = JSON.parse(store);
+    if (req.method === 'POST' && req.url === '/json') {
+      console.log(store);
+      res.setHeader('content-type', 'application/json');
       res.end(store);
     }
-    if (
-      req.method === 'POST' &&
-      dataFormat === 'application/x-www-form-urlencoded'
-    ) {
-      var parsedQueryData = qs.parse(store);
-      res.end(JSON.stringify(parsedQueryData));
+    if (req.method === 'POST' && req.url === '/form') {
+      console.log(store);
+      var formData = qs.parse(store);
+      res.end(JSON.stringify(formData));
     }
   });
 }
